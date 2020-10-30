@@ -1,0 +1,47 @@
+{
+  "name": "servicemeow",
+  "version": "1.0.0",
+  "description": "A Javascript client for the ServiceNOW REST API.",
+  "main": "index.js",
+  "scripts": {
+    "test:mocha": "mocha",
+    "test": "nyc npm run test:mocha",
+    "lint": "eslint --fix ./*.js exceptions/*.js test/*.js",
+    "posttest": "npm run lint"
+  },
+  "author": "Jonathan Keslin <github@jonathankeslin.com>",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:decompil3d/servicemeow"
+  },
+  "license": "Apache-2.0",
+  "dependencies": {
+    "node-fetch": "^2.6.1"
+  },
+  "devDependencies": {
+    "@types/node": "^14.14.6",
+    "@types/sinon": "^9.0.8",
+    "assume": "^2.2.0",
+    "eslint": "^7.12.1",
+    "eslint-config-godaddy": "^4.0.1",
+    "eslint-plugin-json": "^2.1.2",
+    "eslint-plugin-mocha": "^8.0.0",
+    "mocha": "^8.2.0",
+    "nock": "^13.0.4",
+    "nyc": "^15.1.0",
+    "sinon": "^9.2.1"
+  },
+  "keywords": [
+    "serviceNOW",
+    "snow",
+    "service now",
+    "REST API",
+    "servicenow REST API",
+    "javascript",
+    "snow REST API client",
+    "client"
+  ],
+  "engines": {
+    "node": ">=10.0.0"
+  }
+}
