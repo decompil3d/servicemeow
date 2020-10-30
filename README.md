@@ -1,3 +1,5 @@
+![CI](https://github.com/decompil3d/servicemeow/workflows/CI/badge.svg) [![Coverage Status](https://coveralls.io/repos/github/decompil3d/servicemeow/badge.svg?branch=main)](https://coveralls.io/github/decompil3d/servicemeow?branch=main)
+
 # ServiceMeow
 
 A Node.js client for the ServiceNOW REST API.

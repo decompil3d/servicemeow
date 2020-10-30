@@ -7,7 +7,8 @@
     "test:mocha": "mocha",
     "test": "nyc npm run test:mocha",
     "lint": "eslint --fix ./*.js exceptions/*.js test/*.js",
-    "posttest": "npm run lint"
+    "posttest": "npm run lint",
+    "report": "nyc report --reporter=lcov"
   },
   "author": "Jonathan Keslin <github@jonathankeslin.com>",
   "repository": {
