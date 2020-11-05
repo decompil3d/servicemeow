@@ -1,6 +1,6 @@
 {
   "name": "servicemeow",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A Javascript client for the ServiceNOW REST API.",
   "main": "index.js",
   "scripts": {
