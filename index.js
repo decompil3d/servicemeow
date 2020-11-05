@@ -30,7 +30,7 @@ class ServiceMeow {
     this.headers = {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
-      'Authorization': Buffer.from(this.username + ':' + this.password).toString('base64')
+      'Authorization': 'Basic ' + Buffer.from(this.username + ':' + this.password).toString('base64')
     };
     this.baseUrl = utils.buildUrl(this.instance, this.namespace, this.apiName);
   }
