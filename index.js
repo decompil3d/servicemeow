@@ -1,4 +1,5 @@
 /** @type {(url: string, options?: RequestInit) => Promise<Response>} */
+// @ts-expect-error
 const fetch = require('node-fetch');
 const { URL, URLSearchParams } = require('url');
 const OperationException = require('./exceptions/operation-exception');
