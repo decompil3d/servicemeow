@@ -23,7 +23,7 @@
     "@types/node": "^14.17.9",
     "@types/sinon": "^10.0.2",
     "assume": "^2.3.0",
-    "eslint": "^7.32.0",
+    "eslint": "^8.0.0",
     "eslint-config-godaddy": "^5.0.0",
     "eslint-plugin-json": "^3.1.0",
     "eslint-plugin-mocha": "^9.0.0",
