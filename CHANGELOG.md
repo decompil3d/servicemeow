@@ -1,5 +1,9 @@
 # ServiceMeow Changelog
 
+## 3.0.0
+
+- **MAJOR:** Drop Node.js 12 support
+
 ## 2.0.2
 
 - Update dependencies
