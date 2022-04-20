@@ -1,5 +1,9 @@
 # ServiceMeow Changelog
 
+## 3.1.0
+
+- Add auto-generated Typescript typings
+
 ## 3.0.0
 
 - **MAJOR:** Drop Node.js 12 support
