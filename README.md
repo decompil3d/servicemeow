@@ -115,6 +115,11 @@ const query = queryBuilder.field('number').isEmpty();
 const query = queryBuilder.field('number').isNotEmpty();
 ```
 
+## Typings
+
+Typings are automatically generated from the JSDoc comments prior to npm publish. As such, declaration files are
+included in the npm package distribution but not committed to git.
+
 ## Acknowledgements
 
 ServiceMeow was forked from [`ServiceNOW-Client`](https://github.com/Kaushal28/ServiceNOW-Client) by

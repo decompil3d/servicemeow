@@ -65,7 +65,7 @@ class QueryBuilder {
   * Adds new LIKE condition
   *
   * @param {String} containsStr Substring to check
-  * @returns {QueryBuilder} this
+  * @returns {this} this
   */
   contains(containsStr) {
     return this._addCondition('LIKE', containsStr, ['string']);

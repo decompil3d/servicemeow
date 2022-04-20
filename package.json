@@ -3,11 +3,14 @@
   "version": "3.0.0",
   "description": "A Javascript client for the ServiceNOW REST API.",
   "main": "index.js",
+  "types": "./types/index.d.ts",
   "scripts": {
+    "build:types": "tsc",
     "test:mocha": "mocha",
     "test": "nyc npm run test:mocha",
     "lint": "eslint --fix ./*.js exceptions/*.js test/*.js",
     "posttest": "npm run lint",
+    "prepublishOnly": "npm run build:types",
     "report": "nyc report --reporter=lcov"
   },
   "author": "Jonathan Keslin <github@jonathankeslin.com>",
@@ -30,7 +33,8 @@
     "mocha": "^9.2.0",
     "nock": "^13.2.2",
     "nyc": "^15.1.0",
-    "sinon": "^13.0.0"
+    "sinon": "^13.0.0",
+    "typescript": "^4.6.3"
   },
   "keywords": [
     "serviceNOW",
