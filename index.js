@@ -38,7 +38,8 @@ class ServiceMeow {
   /**
   * @callback ResponseSelector
   * @param {Response} res Response object from fetch
-  * @returns {any} Whatever data is needed from the response
+  * @returns {T} Whatever data is needed from the response
+  * @template T
   */
   /**
   * Make a request to ServiceNow
@@ -47,9 +48,10 @@ class ServiceMeow {
   * @param {Object} [query] Query string params object
   * @param {string} [method='GET'] HTTP method to use, defaults to GET
   * @param {Object} [body] Request body as object
-  * @param {ResponseSelector} [responseSelector] Selector to choose what to return. If omitted, JSON promise is
+  * @param {ResponseSelector<T>} [responseSelector] Selector to choose what to return. If omitted, JSON promise is
   *   returned.
-  * @returns {Promise<any>} Promise for response parsed JSON or whatever the ResponseSelector requests
+  * @returns {Promise<T>} Promise for response parsed JSON or whatever the ResponseSelector requests
+  * @template T
   * @private
   */
   // eslint-disable-next-line max-params, max-statements
