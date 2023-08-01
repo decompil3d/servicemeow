@@ -222,6 +222,20 @@ class QueryBuilder {
   }
 
   /**
+  * Adds new 'NOT IN' condition
+  *
+  * @param {string[]|number[]} data Array of strings to compare against
+  * @returns {this} this
+  * @throws {QueryTypeException}
+  */
+  isNoneOf(data) {
+    if (Array.isArray(data)) {
+      return this._addCondition('NOT IN', data, ['string', 'number']);
+    }
+    throw new QueryTypeException('Expected array type, found: ' + typeof data);
+  }
+
+  /**
   * Adds new 'EMPTYSTRING' condition
   * @returns {this} this
   */
