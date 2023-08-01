@@ -262,6 +262,56 @@ class QueryBuilder {
   }
 
   /**
+   * Adds new 'RELATIVEGT' condition
+   * @param {*} n number of unit
+   * @param {*} unit of time (year, month, hour, minute)
+   * @returns {this} this
+   */
+  since(n, unit) {
+    if (!(typeof n === 'number' && typeof unit === 'string')) {
+      throw new QueryTypeException(`Expected (number, string); got (${typeof n}, ${typeof unit})`);
+    }
+    return this._addCondition('RELATIVEGT', `@${unit}@ago@${n}`, ['string']);
+  }
+
+  /**
+   * Adds new 'RELATIVELT' condition
+   * @param {*} n number of unit
+   * @param {*} unit of time (year, month, hour, minute)
+   * @returns {this} this
+   */
+  notSince(n, unit) {
+    if (!(typeof n === 'number' && typeof unit === 'string')) {
+      throw new QueryTypeException(`Expected (number, string); got (${typeof n}, ${typeof unit})`);
+    }
+    return this._addCondition('RELATIVELT', `@${unit}@ago@${n}`, ['string']);
+  }
+
+  /**
+   * @typedef {'year'|'month'|'week'|'day'|'hour'} RelativeToField
+   */
+
+  /**
+   * Adds new two-step fluent 'MORETHAN' condition
+   * @param {number} n number of unit
+   * @param {RelativeToField} unit of time (year, month, week, day, hour)
+   * @returns {RelativeDateBuilder} builder object supporting .before(field) -> original builder
+  */
+  isMoreThan(n, unit) {
+   return new RelativeDateBuilder(this, 'MORE', n, unit);
+  }
+
+  /**
+   * Adds new 'LESSTHAN' condition
+   * @param {number} n number of unit
+   * @param {RelativeToField} unit of time (year, month, week, day, hour)
+   * @returns {RelativeDateBuilder} builder object supporting .before(field) -> original builder
+   */
+  isLessThan(n, unit) {
+    return new RelativeDateBuilder(this, 'LESS', n, unit);
+  }
+
+  /**
   * Adds AND operator
   * @returns {this} this
   */
