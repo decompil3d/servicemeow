@@ -230,6 +230,24 @@ class QueryBuilder {
   }
 
   /**
+   * Adds new 'SAMEAS' condition
+   * @param {*} field string name of compared field
+   * @returns {this} this
+   */
+  isSameAs(field) {
+    return this._addCondition('SAMEAS', field, ['string']);
+  }
+
+  /**
+   * Adds new 'NSAMEAS' condition
+   * @param {*} field string name of compared field
+   * @returns {this} this
+   */
+  isNotSameAs(field) {
+    return this._addCondition('NSAMEAS', field, ['string']);
+  }
+
+  /**
   * Adds AND operator
   * @returns {this} this
   */
