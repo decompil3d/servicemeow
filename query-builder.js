@@ -290,6 +290,46 @@ class QueryBuilder {
   }
 
   /**
+   * Adds new 'GT_FIELD' condition
+   *
+   * @param {string} field name of field to compare against
+   * @returns {this} this
+   */
+  greaterThanField(field) {
+    return this._addComparisonCondition(field, 'GT_FIELD');
+  }
+
+  /**
+   * Adds new 'GT_OR_EQUALS_FIELD' condition
+   *
+   * @param {string} field name of field to compare against
+   * @returns {this} this
+   */
+  greaterThanOrEqualToField(field) {
+    return this._addComparisonCondition(field, 'GT_OR_EQUALS_FIELD');
+  }
+
+  /**
+   * Adds new 'LT_FIELD' condition
+   *
+   * @param {string} field name of field to compare against
+   * @returns {this} this
+   */
+  lessThanField(field) {
+    return this._addComparisonCondition(field, 'LT_FIELD');
+  }
+
+  /**
+   * Adds new 'LT_OR_EQUALS_FIELD' condition
+   *
+   * @param {string} field name of field to compare against
+   * @returns {this} this
+   */
+  lessThanOrEqualToField(field) {
+    return this._addComparisonCondition(field, 'LT_OR_EQUALS_FIELD');
+  }
+
+  /**
    * Adds new 'RELATIVEGT' condition
    * @param {*} n number of unit
    * @param {*} unit of time (year, month, hour, minute)
