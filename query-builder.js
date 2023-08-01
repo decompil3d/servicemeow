@@ -3,6 +3,34 @@ const QueryTypeException = require('./exceptions/query-type-exception');
 const QueryEmptyException = require('./exceptions/query-empty-exception');
 
 /**
+ * @private
+ */
+class RelativeDateBuilder {
+  /**
+   * @param {QueryBuilder} parent Parent builder
+   * @param {string} quantifier Relationship between base and n
+   * @param {number} n Number of unit
+   * @param {RelativeToField} unit Unit of time
+   */
+  constructor(parent, quantifier, n, unit) {
+    this.parent = parent;
+    this.quantifier = quantifier.toLocaleUpperCase();
+    this.n = n;
+    this.unit = unit;
+  }
+
+  /**
+   * Complete the condition and return control to the parent QueryBuilder.
+   * @param {string} field to compare against current field
+   * @returns {QueryBuilder} parent
+   */
+  before(field) {
+    this.parent._addCondition(`${this.quantifier}THAN`, `${field}@${this.unit}@before@${this.n}`, ['string']);
+    return this.parent;
+  }
+}
+
+/**
 * QueryBuilder: For constructing advanced ServiceNow queries
 */
 class QueryBuilder {
@@ -288,26 +316,28 @@ class QueryBuilder {
   }
 
   /**
-   * @typedef {'year'|'month'|'week'|'day'|'hour'} RelativeToField
-   */
-
-  /**
    * Adds new two-step fluent 'MORETHAN' condition
-   * @param {number} n number of unit
-   * @param {RelativeToField} unit of time (year, month, week, day, hour)
-   * @returns {RelativeDateBuilder} builder object supporting .before(field) -> original builder
+   * @param {*} n number of unit
+   * @param {*} unit of time (year, month, week, day, hour)
+   * @returns builder object supporting .before(field) -> original builder
   */
   isMoreThan(n, unit) {
-   return new RelativeDateBuilder(this, 'MORE', n, unit);
+    if (!(typeof n === 'number' && typeof unit === 'string')) {
+      throw new QueryTypeException(`Expected (number, string); got (${typeof n}, ${typeof unit})`);
+    }
+    return new RelativeDateBuilder(this, 'MORE', n, unit);
   }
 
   /**
-   * Adds new 'LESSTHAN' condition
-   * @param {number} n number of unit
-   * @param {RelativeToField} unit of time (year, month, week, day, hour)
-   * @returns {RelativeDateBuilder} builder object supporting .before(field) -> original builder
+   * Adds new two-step fluent 'LESSTHAN' condition
+   * @param {*} n number of unit
+   * @param {*} unit of time (year, month, week, day, hour)
+   * @returns builder object supporting .before(field) -> original builder
    */
   isLessThan(n, unit) {
+    if (!(typeof n === 'number' && typeof unit === 'string')) {
+      throw new QueryTypeException(`Expected (number, string); got (${typeof n}, ${typeof unit})`);
+    }
     return new RelativeDateBuilder(this, 'LESS', n, unit);
   }
 
