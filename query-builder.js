@@ -3,6 +3,10 @@ const QueryTypeException = require('./exceptions/query-type-exception');
 const QueryEmptyException = require('./exceptions/query-empty-exception');
 
 /**
+ * @typedef {'year'|'month'|'week'|'day'|'hour'} RelativeToField
+ */
+
+/**
  * @private
  */
 class RelativeDateBuilder {
@@ -329,14 +333,14 @@ class QueryBuilder {
     return this._addComparisonCondition(field, 'LT_OR_EQUALS_FIELD');
   }
 
-/**
- * @typedef {"year" | "month" | "day" | "hour" | "minute" | "second"} TimeUnit
- */
+  /**
+   * @typedef {'year'|'month'|'hour'|'minute'} RelativeToNow
+   */
 
   /**
    * Adds new 'RELATIVEGT' condition
    * @param {number} n number of unit
-   * @param {TimeUnit} unit of time (year, month, hour, minute)
+   * @param {RelativeToNow} unit of time (year, month, hour, minute)
    * @returns {this} this
    */
   since(n, unit) {
@@ -349,9 +353,9 @@ class QueryBuilder {
   /**
    * Adds new 'RELATIVELT' condition
    * @param {number} n number of unit
-   * @param {TimeUnit} unit of time (year, month, hour, minute)
+   * @param {RelativeToNow} unit of time (year, month, hour, minute)
    * @returns {this} this
-   */
+  */
   notSince(n, unit) {
     if (!(typeof n === 'number' && typeof unit === 'string')) {
       throw new QueryTypeException(`Expected (number, string); got (${typeof n}, ${typeof unit})`);
@@ -362,7 +366,7 @@ class QueryBuilder {
   /**
    * Adds new two-step fluent 'MORETHAN' condition
    * @param {number} n number of unit
-   * @param {TimeUnit} unit of time (year, month, week, day, hour)
+   * @param {RelativeToField} unit of time (year, month, week, day, hour)
    * @returns {RelativeDateBuilder} builder object supporting .before(field) -> original builder
   */
   isMoreThan(n, unit) {
@@ -375,7 +379,7 @@ class QueryBuilder {
   /**
    * Adds new two-step fluent 'LESSTHAN' condition
    * @param {number} n number of unit
-   * @param {TimeUnit} unit of time (year, month, week, day, hour)
+   * @param {RelativeToField} unit of time (year, month, week, day, hour)
    * @returns {RelativeDateBuilder} builder object supporting .before(field) -> original builder
    */
   isLessThan(n, unit) {
