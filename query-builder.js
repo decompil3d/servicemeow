@@ -273,7 +273,7 @@ class QueryBuilder {
 
   /**
    * Adds new 'SAMEAS' condition
-   * @param {*} field string name of compared field
+   * @param {string} field string name of compared field
    * @returns {this} this
    */
   isSameAs(field) {
@@ -282,7 +282,7 @@ class QueryBuilder {
 
   /**
    * Adds new 'NSAMEAS' condition
-   * @param {*} field string name of compared field
+   * @param {string} field string name of compared field
    * @returns {this} this
    */
   isNotSameAs(field) {
@@ -329,10 +329,14 @@ class QueryBuilder {
     return this._addComparisonCondition(field, 'LT_OR_EQUALS_FIELD');
   }
 
+/**
+ * @typedef {"year" | "month" | "day" | "hour" | "minute" | "second"} TimeUnit
+ */
+
   /**
    * Adds new 'RELATIVEGT' condition
-   * @param {*} n number of unit
-   * @param {*} unit of time (year, month, hour, minute)
+   * @param {number} n number of unit
+   * @param {TimeUnit} unit of time (year, month, hour, minute)
    * @returns {this} this
    */
   since(n, unit) {
@@ -344,8 +348,8 @@ class QueryBuilder {
 
   /**
    * Adds new 'RELATIVELT' condition
-   * @param {*} n number of unit
-   * @param {*} unit of time (year, month, hour, minute)
+   * @param {number} n number of unit
+   * @param {TimeUnit} unit of time (year, month, hour, minute)
    * @returns {this} this
    */
   notSince(n, unit) {
@@ -357,9 +361,9 @@ class QueryBuilder {
 
   /**
    * Adds new two-step fluent 'MORETHAN' condition
-   * @param {*} n number of unit
-   * @param {*} unit of time (year, month, week, day, hour)
-   * @returns builder object supporting .before(field) -> original builder
+   * @param {number} n number of unit
+   * @param {TimeUnit} unit of time (year, month, week, day, hour)
+   * @returns {RelativeDateBuilder} builder object supporting .before(field) -> original builder
   */
   isMoreThan(n, unit) {
     if (!(typeof n === 'number' && typeof unit === 'string')) {
@@ -370,9 +374,9 @@ class QueryBuilder {
 
   /**
    * Adds new two-step fluent 'LESSTHAN' condition
-   * @param {*} n number of unit
-   * @param {*} unit of time (year, month, week, day, hour)
-   * @returns builder object supporting .before(field) -> original builder
+   * @param {number} n number of unit
+   * @param {TimeUnit} unit of time (year, month, week, day, hour)
+   * @returns {RelativeDateBuilder} builder object supporting .before(field) -> original builder
    */
   isLessThan(n, unit) {
     if (!(typeof n === 'number' && typeof unit === 'string')) {
