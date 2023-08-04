@@ -72,7 +72,6 @@ const query = queryBuilder.field('sys_created_on').lessThan(new Date());
 // Greater than using Date object
 const query = queryBuilder.field('sys_created_on').lessThan(new Date());
 
-
 // compound query using and, lessThan, greaterThan
 const query = queryBuilder.field('number').greaterThan('S').and().field('sys_created_on').lessThan(new Date());
 
@@ -86,6 +85,9 @@ const query = queryBuilder.field('description').isEmptyString();
 
 // Example of 'IN' operator
 const query = queryBuilder.field('number').isOneOf(['INC0010122','INC0010120']);
+
+// Example of 'NOT IN' operator
+const query = queryBuilder.field('foo').isNoneOf(['bar', 'baz']);
 
 // Is anything operator
 const query = queryBuilder.field('number').isAnything();
@@ -113,6 +115,36 @@ const query = queryBuilder.field('number').isEmpty();
 
 // isNotEmpty
 const query = queryBuilder.field('number').isNotEmpty();
+
+// Example of 'SAMEAS' operator
+const query = queryBuilder.field('left').isSameAs('middle');
+
+// Example of 'NSAMEAS' operator
+const query = queryBuilder.field('left').isNotSameAs('right');
+
+// Example of 'GT_FIELD' operator
+const query = queryBuilder.field('foo').greaterThanField('bar');
+
+// Example of 'GT_OR_EQUALS_FIELD' operator
+const query = queryBuilder.field('foo').greaterThanOrEqualsField('bar');
+
+// Example of 'LT_FIELD' operator
+const query = queryBuilder.field('foo').lessThanField('bar');
+
+// Example of 'LT_OR_EQUALS_FIELD' operator
+const query = queryBuilder.field('foo').lessThanOrEqualsField('bar');
+
+// Example of 'RELATIVEGT' operator
+const query = queryBuilder.field('sys_updated_on').since(1, 'hour');
+
+// Example of 'RELATIVELT' operator
+const query = queryBuilder.field('sys_updated_on').notSince(10, 'minute');
+
+// Example of 'MORETHAN' operator
+const query = queryBuilder.field('sys_created_on').isMoreThan(1, 'year').before('sys_updated_on');
+
+// Example of 'LESSTHAN' operator
+const query = queryBuilder.field('sys_created_on').isLessThan(12, 'hour').before('sys_updated_on');
 ```
 
 ## Typings
