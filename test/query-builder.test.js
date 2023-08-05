@@ -416,6 +416,37 @@ describe('QueryBuilder', function () {
     });
   });
 
+  describe('isNoneOf', function () {
+    it('is a function', function () {
+      assume(q.isNoneOf).is.a('function');
+      assume(q.isNoneOf).has.length(1);
+    });
+
+    it('throws when no field is set', function () {
+      assume(() => q.isNoneOf(['foo'])).throws(QueryMissingFieldException);
+    });
+
+    it('throws when a non-array is passed', function () {
+      // @ts-expect-error
+      assume(() => q.isNoneOf(1)).throws(QueryTypeException);
+    });
+
+    it('throws when an array of the wrong type is passed', function () {
+      // @ts-expect-error
+      assume(() => q.field('foo').isNoneOf([true, true])).throws(QueryTypeException);
+    });
+
+    it('constructs query properly for strings', function () {
+      const res = q.field('foo').isNoneOf(['bar', 'baz']).build();
+      assume(res).equals('fooNOT INbar,baz');
+    });
+
+    it('constructs query properly for numbers', function () {
+      const res = q.field('foo').isNoneOf([1, 2]).build();
+      assume(res).equals('fooNOT IN1,2');
+    });
+  });
+
   describe('isEmptyString', function () {
     it('is a function', function () {
       assume(q.isEmptyString).is.a('function');
@@ -429,6 +460,178 @@ describe('QueryBuilder', function () {
     it('constructs query properly', function () {
       const res = q.field('foo').isEmptyString().build();
       assume(res).equals('fooEMPTYSTRING');
+    });
+  });
+
+  describe('isSameAs', function () {
+    it('is a function', function () {
+      assume(q.isSameAs).is.a('function');
+      assume(q.isSameAs).has.length(1);
+    });
+    it('throws when no field is set', function () {
+      assume(() => q.isSameAs('foo')).throws(QueryMissingFieldException);
+    });
+    it('constructs query properly', function () {
+      const res = q.field('foo').isSameAs('bar').build();
+      assume(res).equals('fooSAMEASbar');
+    });
+  });
+
+  describe('isNotSameAs', function () {
+    it('is a function', function () {
+      assume(q.isNotSameAs).is.a('function');
+      assume(q.isNotSameAs).has.length(1);
+    });
+    it('throws when no field is set', function () {
+      assume(() => q.isNotSameAs('foo')).throws(QueryMissingFieldException);
+    });
+    it('constructs query properly', function () {
+      const res = q.field('foo').isNotSameAs('bar').build();
+      assume(res).equals('fooNSAMEASbar');
+    });
+  });
+
+  describe('greaterThanField', function () {
+    it('is a function', function () {
+      assume(q.greaterThanField).is.a('function');
+      assume(q.greaterThanField).has.length(1);
+    });
+    it('throws when no field is set', function () {
+      assume(() => q.greaterThanField('foo')).throws(QueryMissingFieldException);
+    });
+    it('constructs query properly', function () {
+      const res = q.field('foo').greaterThanField('bar').build();
+      assume(res).equals('fooGT_FIELDbar');
+    });
+  });
+
+  describe('greaterThanOrEqualToField', function () {
+    it('is a function', function () {
+      assume(q.greaterThanOrEqualToField).is.a('function');
+      assume(q.greaterThanOrEqualToField).has.length(1);
+    });
+    it('throws when no field is set', function () {
+      assume(() => q.greaterThanOrEqualToField('foo')).throws(QueryMissingFieldException);
+    });
+    it('constructs query properly', function () {
+      const res = q.field('foo').greaterThanOrEqualToField('bar').build();
+      assume(res).equals('fooGT_OR_EQUALS_FIELDbar');
+    });
+  });
+
+  describe('lessThanField', function () {
+    it('is a function', function () {
+      assume(q.lessThanField).is.a('function');
+      assume(q.lessThanField).has.length(1);
+    });
+    it('throws when no field is set', function () {
+      assume(() => q.lessThanField('foo')).throws(QueryMissingFieldException);
+    });
+    it('constructs query properly', function () {
+      const res = q.field('foo').lessThanField('bar').build();
+      assume(res).equals('fooLT_FIELDbar');
+    });
+  });
+
+  describe('lessThanOrEqualToField', function () {
+    it('is a function', function () {
+      assume(q.lessThanOrEqualToField).is.a('function');
+      assume(q.lessThanOrEqualToField).has.length(1);
+    });
+    it('throws when no field is set', function () {
+      assume(() => q.lessThanOrEqualToField('foo')).throws(QueryMissingFieldException);
+    });
+    it('constructs query properly', function () {
+      const res = q.field('foo').lessThanOrEqualToField('bar').build();
+      assume(res).equals('fooLT_OR_EQUALS_FIELDbar');
+    });
+  });
+
+  describe('since', function () {
+    it('is a function', function () {
+      assume(q.since).is.a('function');
+      assume(q.since).has.length(2);
+    });
+    it('throws when no field is set', function () {
+      assume(() => q.since(1, 'hour')).throws(QueryMissingFieldException);
+    });
+    it('throws on improper quantity argument', function () {
+      // @ts-expect-error
+      assume(() => q.since('1', 'hour')).throws(QueryTypeException);
+    });
+    it('throws on improper unit argument', function () {
+      // @ts-expect-error
+      assume(() => q.since(1, true)).throws(QueryTypeException);
+    });
+    it('constructs query properly', function () {
+      const res = q.field('foo').since(1, 'hour').build();
+      assume(res).equals('fooRELATIVEGT@hour@ago@1');
+    });
+  });
+
+  describe('notSince', function () {
+    it('is a function', function () {
+      assume(q.notSince).is.a('function');
+      assume(q.notSince).has.length(2);
+    });
+    it('throws when no field is set', function () {
+      assume(() => q.notSince(1, 'hour')).throws(QueryMissingFieldException);
+    });
+    it('throws on improper quantity argument', function () {
+      // @ts-expect-error
+      assume(() => q.notSince('1', 'hour')).throws(QueryTypeException);
+    });
+    it('throws on improper unit argument', function () {
+      // @ts-expect-error
+      assume(() => q.notSince(1, true)).throws(QueryTypeException);
+    });
+    it('constructs query properly', function () {
+      const res = q.field('foo').notSince(1, 'hour').build();
+      assume(res).equals('fooRELATIVELT@hour@ago@1');
+    });
+  });
+
+  describe('isMoreThan', function () {
+    it('is a function', function () {
+      assume(q.isMoreThan).is.a('function');
+      assume(q.isMoreThan).has.length(2);
+    });
+    it('throws when no field is set', function () {
+      assume(() => q.isMoreThan(1, 'hour').before('foo')).throws(QueryMissingFieldException);
+    });
+    it('throws on improper quantity argument', function () {
+      // @ts-expect-error
+      assume(() => q.isMoreThan('1', 'hour')).throws(QueryTypeException);
+    });
+    it('throws on improper unit argument', function () {
+      // @ts-expect-error
+      assume(() => q.isMoreThan(1, true)).throws(QueryTypeException);
+    });
+    it('constructs query properly', function () {
+      const res = q.field('foo').isMoreThan(1, 'hour').before('bar').build();
+      assume(res).equals('fooMORETHANbar@hour@before@1');
+    });
+  });
+
+  describe('isLessThan', function () {
+    it('is a function', function () {
+      assume(q.isLessThan).is.a('function');
+      assume(q.isLessThan).has.length(2);
+    });
+    it('throws when no field is set', function () {
+      assume(() => q.isLessThan(1, 'hour').before('foo')).throws(QueryMissingFieldException);
+    });
+    it('throws on improper quantity argument', function () {
+      // @ts-expect-error
+      assume(() => q.isLessThan('1', 'hour')).throws(QueryTypeException);
+    });
+    it('throws on improper unit argument', function () {
+      // @ts-expect-error
+      assume(() => q.isLessThan(1, true)).throws(QueryTypeException);
+    });
+    it('constructs query properly', function () {
+      const res = q.field('foo').isLessThan(1, 'hour').before('bar').build();
+      assume(res).equals('fooLESSTHANbar@hour@before@1');
     });
   });
 

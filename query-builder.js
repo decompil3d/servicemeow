@@ -3,6 +3,38 @@ const QueryTypeException = require('./exceptions/query-type-exception');
 const QueryEmptyException = require('./exceptions/query-empty-exception');
 
 /**
+ * @typedef {'year'|'month'|'week'|'day'|'hour'} RelativeToField
+ */
+
+/**
+ * @private
+ */
+class RelativeDateBuilder {
+  /**
+   * @param {QueryBuilder} parent Parent builder
+   * @param {string} quantifier Relationship between base and n
+   * @param {number} n Number of unit
+   * @param {RelativeToField} unit Unit of time
+   */
+  constructor(parent, quantifier, n, unit) {
+    this.parent = parent;
+    this.quantifier = quantifier.toLocaleUpperCase();
+    this.n = n;
+    this.unit = unit;
+  }
+
+  /**
+   * Complete the condition and return control to the parent QueryBuilder.
+   * @param {string} field to compare against current field
+   * @returns {QueryBuilder} parent
+   */
+  before(field) {
+    this.parent._addCondition(`${this.quantifier}THAN`, `${field}@${this.unit}@before@${this.n}`, ['string']);
+    return this.parent;
+  }
+}
+
+/**
 * QueryBuilder: For constructing advanced ServiceNow queries
 */
 class QueryBuilder {
@@ -222,11 +254,139 @@ class QueryBuilder {
   }
 
   /**
+  * Adds new 'NOT IN' condition
+  *
+  * @param {string[]|number[]} data Array of strings to compare against
+  * @returns {this} this
+  * @throws {QueryTypeException}
+  */
+  isNoneOf(data) {
+    if (Array.isArray(data)) {
+      return this._addCondition('NOT IN', data, ['string', 'number']);
+    }
+    throw new QueryTypeException('Expected array type, found: ' + typeof data);
+  }
+
+  /**
   * Adds new 'EMPTYSTRING' condition
   * @returns {this} this
   */
   isEmptyString() {
     return this._addCondition('EMPTYSTRING', '', ['string']);
+  }
+
+  /**
+   * Adds new 'SAMEAS' condition
+   * @param {string} field string name of compared field
+   * @returns {this} this
+   */
+  isSameAs(field) {
+    return this._addCondition('SAMEAS', field, ['string']);
+  }
+
+  /**
+   * Adds new 'NSAMEAS' condition
+   * @param {string} field string name of compared field
+   * @returns {this} this
+   */
+  isNotSameAs(field) {
+    return this._addCondition('NSAMEAS', field, ['string']);
+  }
+
+  /**
+   * Adds new 'GT_FIELD' condition
+   *
+   * @param {string} field name of field to compare against
+   * @returns {this} this
+   */
+  greaterThanField(field) {
+    return this._addComparisonCondition(field, 'GT_FIELD');
+  }
+
+  /**
+   * Adds new 'GT_OR_EQUALS_FIELD' condition
+   *
+   * @param {string} field name of field to compare against
+   * @returns {this} this
+   */
+  greaterThanOrEqualToField(field) {
+    return this._addComparisonCondition(field, 'GT_OR_EQUALS_FIELD');
+  }
+
+  /**
+   * Adds new 'LT_FIELD' condition
+   *
+   * @param {string} field name of field to compare against
+   * @returns {this} this
+   */
+  lessThanField(field) {
+    return this._addComparisonCondition(field, 'LT_FIELD');
+  }
+
+  /**
+   * Adds new 'LT_OR_EQUALS_FIELD' condition
+   *
+   * @param {string} field name of field to compare against
+   * @returns {this} this
+   */
+  lessThanOrEqualToField(field) {
+    return this._addComparisonCondition(field, 'LT_OR_EQUALS_FIELD');
+  }
+
+  /**
+   * @typedef {'year'|'month'|'hour'|'minute'} RelativeToNow
+   */
+
+  /**
+   * Adds new 'RELATIVEGT' condition
+   * @param {number} n number of unit
+   * @param {RelativeToNow} unit of time (year, month, hour, minute)
+   * @returns {this} this
+   */
+  since(n, unit) {
+    if (!(typeof n === 'number' && typeof unit === 'string')) {
+      throw new QueryTypeException(`Expected (number, string); got (${typeof n}, ${typeof unit})`);
+    }
+    return this._addCondition('RELATIVEGT', `@${unit}@ago@${n}`, ['string']);
+  }
+
+  /**
+   * Adds new 'RELATIVELT' condition
+   * @param {number} n number of unit
+   * @param {RelativeToNow} unit of time (year, month, hour, minute)
+   * @returns {this} this
+  */
+  notSince(n, unit) {
+    if (!(typeof n === 'number' && typeof unit === 'string')) {
+      throw new QueryTypeException(`Expected (number, string); got (${typeof n}, ${typeof unit})`);
+    }
+    return this._addCondition('RELATIVELT', `@${unit}@ago@${n}`, ['string']);
+  }
+
+  /**
+   * Adds new two-step fluent 'MORETHAN' condition
+   * @param {number} n number of unit
+   * @param {RelativeToField} unit of time (year, month, week, day, hour)
+   * @returns {RelativeDateBuilder} builder object supporting .before(field) -> original builder
+  */
+  isMoreThan(n, unit) {
+    if (!(typeof n === 'number' && typeof unit === 'string')) {
+      throw new QueryTypeException(`Expected (number, string); got (${typeof n}, ${typeof unit})`);
+    }
+    return new RelativeDateBuilder(this, 'MORE', n, unit);
+  }
+
+  /**
+   * Adds new two-step fluent 'LESSTHAN' condition
+   * @param {number} n number of unit
+   * @param {RelativeToField} unit of time (year, month, week, day, hour)
+   * @returns {RelativeDateBuilder} builder object supporting .before(field) -> original builder
+   */
+  isLessThan(n, unit) {
+    if (!(typeof n === 'number' && typeof unit === 'string')) {
+      throw new QueryTypeException(`Expected (number, string); got (${typeof n}, ${typeof unit})`);
+    }
+    return new RelativeDateBuilder(this, 'LESS', n, unit);
   }
 
   /**
