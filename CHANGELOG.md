@@ -1,5 +1,7 @@
 # ServiceMeow Changelog
 
+> Changelog for versions >= 3.2.0 is available within the GitHub releases page.
+
 ## 3.1.0
 
 - Add auto-generated Typescript typings
