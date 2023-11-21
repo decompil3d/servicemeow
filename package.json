@@ -23,7 +23,7 @@
     "node-fetch": "^2.6.7"
   },
   "devDependencies": {
-    "@types/node": "^18.0.0",
+    "@types/node": "^20.0.0",
     "@types/sinon": "^10.0.8",
     "assume": "^2.3.0",
     "eslint": "^8.7.0",
