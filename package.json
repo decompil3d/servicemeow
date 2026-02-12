@@ -28,7 +28,7 @@
     "assume": "^2.3.0",
     "eslint": "^8.7.0",
     "eslint-config-godaddy": "^7.0.0",
-    "eslint-plugin-json": "^3.1.0",
+    "eslint-plugin-json": "^4.0.0",
     "eslint-plugin-mocha": "^10.0.3",
     "mocha": "^10.0.0",
     "nock": "^13.2.2",
